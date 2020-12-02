@@ -1,5 +1,33 @@
-<!DOCTYPE html>
-<meta charset="UTF-8">
+<!DOCTYPE html><meta charset="UTF-8">
 <html><body>
-    <div>Hello world!</div>
+    <div>Hello WebCalc!</div>
+    <input />
+    <script>
+    function calc() // 「＝」ボタンが押されたので計算する
+    {
+        const v = document.querySelector( 'input' ).value
+        const f = new Function( 'return ' + v )
+        update( f().toString() )
+    }
+    function update( _v ) // input tag を更新する関数
+    {
+        document.querySelector( 'input' ).value = _v
+    }
+    </script></br>
+    <button onclick="document.querySelector( 'input' ).value += '1' " >1</button>
+    <button onclick="document.querySelector( 'input' ).value += '2' " >2</button>
+    <button onclick="document.querySelector( 'input' ).value += '3' " >3</button></br>
+    <button onclick="document.querySelector( 'input' ).value += '4' " >4</button>
+    <button onclick="document.querySelector( 'input' ).value += '5' " >5</button>
+    <button onclick="document.querySelector( 'input' ).value += '6' " >6</button></br>
+    <button onclick="document.querySelector( 'input' ).value += '7' " >7</button>
+    <button onclick="document.querySelector( 'input' ).value += '8' " >8</button>
+    <button onclick="document.querySelector( 'input' ).value += '9' " >9</button></br>
+    <button onclick="document.querySelector( 'input' ).value += '0' " >0</button>
+    <button onclick="document.querySelector( 'input' ).value += '+' " >+</button>
+    <button onclick="document.querySelector( 'input' ).value += '-' " >-</button></br>
+    <button onclick="document.querySelector( 'input' ).value += '*' " >×</button>
+    <button onclick="document.querySelector( 'input' ).value += '/' " >÷</button>
+    <button onclick="calc()" >=</button></br>
+    <button onclick="document.querySelector( 'input' ).value = '' " >CLR</button>
 </body></html>
