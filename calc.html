@@ -1,0 +1,151 @@
+<!DOCTYPE html><meta charset="UTF-8">
+<html><body>    
+    <input style="width:208px;height:25px"/>
+    <script>
+
+    function calc() // 「＝」ボタンが押されたので計算する
+    {
+        const v = document.querySelector( 'input' ).value
+        const f = new Function( 'return ' + v )
+        update( f().toString() )
+    }
+    function update( _v ) // input tag を更新する関数
+    {
+        document.querySelector( 'input' ).value = _v
+    }
+
+
+    function operator(op)   //記号が複数入らないようにする
+    {
+        switch (op){
+            case '(':   //入力された記号がどちらかのとき (括弧の前に記号が入るのを許すため括弧とその他で処理を分けている)
+            case ')': 
+                var a = document.querySelector( 'input' ).value.slice(-1);      //入力された式の1文字前を取得
+                switch(a){
+                    case '(':   //かつ1文字前がいずれかのとき
+                    case ')':
+                    Clr();      //1文字前を消す (括弧が複数入らないようにする)
+                    break;
+                }
+                break;
+            case '/':   //入力された記号がいずれかのとき
+            case '*':
+            case '-':
+            case '+':
+            case '.':
+                var a = document.querySelector( 'input' ).value.slice(-1);      //入力された式の1文字前を取得
+                switch (a){
+                    case '(':   //かつ1文字前がいずれかのとき
+                    case '/':
+                    case '*':
+                    case '-':
+                    case '+':
+                    case '.':
+                    Clr();      //1文字前を消す (記号が複数入らないようにする)
+                }
+                break;
+        }
+        document.querySelector( 'input' ).value += op   //入力された記号を式に入れる
+    }
+
+    function Clr(){     //(式の)後ろから1文字を消す
+        document.querySelector( 'input' ).value = document.querySelector( 'input' ).value.slice(0,-1);
+    }
+
+    function Numberclr(){       //電卓の"C"の機能　式の途中で記号の前の数字だけを消す
+        console.log(document.querySelector( 'input' ).value.length);    //式の文字数を取得
+        var loop = document.querySelector( 'input' ).value.length;      //式の文字数分(最大回数)数字か見れるようにする
+        for (var i = 1; i <= loop && (document.querySelector( 'input' ).value.slice(-1) >= '.' || document.querySelector( 'input' ).value.slice(-1) >= 0 && document.querySelector( 'input' ).value.slice(-1) <= 9); i++){  //繰り返し回数が式の文字数分以内で、かつ式の最後の1文字が"."か数字の時
+            Clr();  //1文字前を消す
+        }
+    }
+
+
+    var memory = 0;     //メモリー機能用変数
+
+    function Memory(command){   //電卓のメモリー機能
+        switch(command){
+            case 'C':   //MCを押したとき
+                document.querySelector( 'input' ).value = ''    //表示をクリア
+                memory = 0;                     //memoryをクリア
+                MR.style.backgroundColor = "";  //MRとMCが有効でないことを示すため色を元に戻す
+                MC.style.backgroundColor = "";
+                break;
+            case 'R':   //MRを押したとき
+                document.querySelector( 'input' ).value = ''         //表示をクリア
+                document.querySelector( 'input' ).value = memory;    //memoryの内容を表示する
+                break;
+            case '-':   //M-を押したとき
+                if (!isNaN(parseFloat(document.querySelector( 'input' ).value))){   //入力されているものが数値であるかチェック
+                    memory = parseFloat(memory) - parseFloat(document.querySelector( 'input' ).value);  //入力されているものが数値のとき、memoryから入力されている数値を引く
+                }
+                if(memory != 0){     //memoryが0でないとき(memoryに数値が入っているとき)
+                    MR.style.backgroundColor = "#BAD3FF";   //MRとMCが有効であることを示すため色を変更
+                    MC.style.backgroundColor = "#f18e9c";
+                }else{              //memoryが0のとき
+                    MR.style.backgroundColor = "";  //MRとMCが有効でないことを示すため色を元に戻す
+                    MC.style.backgroundColor = "";
+                }
+                break;
+            case '+':   //M+を押したとき
+            if (!isNaN(parseFloat(document.querySelector( 'input' ).value))){   //入力されているものが数値であるかチェック
+                    memory = parseFloat(memory) + parseFloat(document.querySelector( 'input' ).value);  //入力されているものが数値のとき、memoryに入力されている数値を足す
+                }
+                if(memory != 0){     //memoryが0でないとき(memoryに数値が入っているとき)
+                    MR.style.backgroundColor = "#BAD3FF";   //MRとMCが有効であることを示すため色を変更
+                    MC.style.backgroundColor = "#f09da9";
+                }else{              //memoryが0のとき
+                    MR.style.backgroundColor = "";  //MRとMCが有効でないことを示すため色を元に戻す
+                    MC.style.backgroundColor = "";
+                }
+                break;
+        }
+    }
+    </script></br>
+  
+<table>
+    <tr>
+        <td><button style="width:40px;height:35px" onclick="" >　</button></td>
+        <td><button style="width:40px;height:35px" id="MC" onclick="Memory('C')" >MC</button></td>
+        <td><button style="width:40px;height:35px" id="MR" onclick="Memory('R')" >MR</button></td>
+        <td><button style="width:40px;height:35px; background-Color:#BAD3FF" id="M-" onclick="Memory('-')" >M-</button></td>
+        <td><button style="width:40px;height:35px; background-Color:#BAD3FF" id="M+" onclick="Memory('+')" >M+</button></td>
+    </tr>
+    <tr>
+        <td><button style="width:40px;height:35px" onclick="" >　</button></td>
+        <td><button style="width:40px;height:35px" onclick="operator('(')" >(</button></td>
+        <td><button style="width:40px;height:35px" onclick="operator(')')" >)</button></td>
+        <td><button style="width:40px;height:35px" onclick="" >　</button></td>
+        <td><button style="width:40px;height:35px" onclick="" >　</button></td>
+        
+    </tr>
+    <tr>
+        <td><button style="width:40px;height:35px; background-Color:#f09da9" onclick="Clr() " >BS</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '1' " >1</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '2' " >2</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '3' " >3</button></td>
+        <td><button style="width:40px;height:35px" onclick="operator('/')" >÷</button></td>
+    </tr>
+    <tr>
+        <td><button style="width:40px;height:35px; background-Color:#f09da9" onclick="Numberclr()" >C</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '4' " >4</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '5' " >5</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '6' " >6</button></td>
+        <td><button style="width:40px;height:35px" onclick="operator('*')" >×</button></td>
+    </tr>
+    <tr>
+        <td><button  style="background-Color:#f09da9; width:40px;height:35px" onclick="document.querySelector( 'input' ).value = '' " >AC</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '7' " >7</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '8' " >8</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '9' " >9</button></td>
+        <td><button style="width:40px;height:35px" onclick="operator('-')" >-</button></td>
+    </tr>
+    <tr>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '00' " >00</button></td>
+        <td><button style="width:40px;height:35px" onclick="document.querySelector( 'input' ).value += '0' " >0</button></td>
+        <td><button style="width:40px;height:35px" onclick="operator('.')" >.</button></td>
+        <td><button style="width:40px;height:35px" onclick="calc()" >=</button>
+        <td><button style="width:40px;height:35px" onclick="operator('+')" >+</button></td>            
+    </tr>
+</table>
+</body></html>
