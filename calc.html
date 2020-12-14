@@ -18,25 +18,37 @@
     function operator(op)   //記号が複数入らないようにする
     {
         switch (op){
-            case '(':   //入力された記号がどちらかのとき (括弧の前に記号が入るのを許すため括弧とその他で処理を分けている)
             case ')': 
                 var a = document.querySelector( 'input' ).value.slice(-1);      //入力された式の1文字前を取得
-                switch(a){
-                    case '(':   //かつ1文字前がいずれかのとき
-                    case ')':
-                    Clr();      //1文字前を消す (括弧が複数入らないようにする)
-                    break;
-                }
+                    switch (a){
+                        case '(':   //入力された記号がいずれかのとき
+                        case '/':
+                        case '*':
+                        case '-':
+                        case '+':
+                        case '.':
+                            Clr();      //1文字前を消す (括弧が複数入らないようにする)
+                    }
                 break;
             case '/':   //入力された記号がいずれかのとき
             case '*':
-            case '-':
-            case '+':
             case '.':
                 var a = document.querySelector( 'input' ).value.slice(-1);      //入力された式の1文字前を取得
+                    switch (a){
+                        case '(':   //かつ1文字前がいずれかのとき
+                        case '/':
+                        case '*':
+                        case '-':
+                        case '+':
+                        case '.':
+                        Clr();      //1文字前を消す (記号が複数入らないようにする)
+                    }
+                    break;
+            case '-':   //入力された記号がいずれかのとき ('('の次に'+'と'-'が入るのを許すため処理を分けている)
+            case '+':
+                var a = document.querySelector( 'input' ).value.slice(-1);      //入力された式の1文字前を取得
                 switch (a){
-                    case '(':   //かつ1文字前がいずれかのとき
-                    case '/':
+                    case '/':   //かつ1文字前がいずれかのとき
                     case '*':
                     case '-':
                     case '+':
